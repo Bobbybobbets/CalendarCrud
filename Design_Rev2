@@ -1,2 +1,2 @@
-git rm Design_Rev2
-git push
+git rm --cached Design_Rev2
+
