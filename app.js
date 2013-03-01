@@ -6,6 +6,7 @@
 var express = require('express')
   , routes = require('./routes')
   , user = require('./routes/user')
+  , events = require('./routes/events')
   , http = require('http')
   , path = require('path')
   , orm = require('orm');
@@ -17,6 +18,7 @@ app.configure(function(){
   app.set('port', process.env.PORT || 3001);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
+  app.set('db_host', 'mysql://root:root@localhost:8889/FoxCode');
   app.use(express.favicon());
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
@@ -32,16 +34,22 @@ app.configure('development', function(){
 app.get('/', routes.index);
 app.get('/users', user.list);
 app.get('/users/:userid', user.get);
+app.get('/users/:userid/events', user.getEvents);
+app.get('/users/:userid/events/:time1/:time2', user.getEvents);
+app.get('/events', events.list);
+app.get('/events/:time1/:time2', events.getInInterval);
+app.get('/events/categories', events.getCategories);
+app.get('/events/types', events.getTypes);
+app.get('/events/:eventid', events.get);
 app.post('/users', user.create);
 
 //loading and syncing application models
-orm.connect("mysql://root:root@localhost:8889/FoxCode", function(err, db){
+orm.connect("mysql://root:root@localhost:8889/FoxCode", function(err, db){  
   if(err) throw err;
 
   db.load('./models/models', function(err){
     if(err) throw err;
 
-    db_connection = db;
     console.log("Models successfully loaded");
   });
 });
