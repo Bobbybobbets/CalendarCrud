@@ -42,6 +42,9 @@ app.get('/events/categories', events.getCategories);
 app.get('/events/types', events.getTypes);
 app.get('/events/:eventid', events.get);
 app.post('/users', user.create);
+app.post('/users/:userid/events', user.addEvent);
+app.post('/events/categories', events.createCategory);
+app.post('/events/types', events.createType);
 
 //loading and syncing application models
 orm.connect("mysql://root:root@localhost:8889/FoxCode", function(err, db){  

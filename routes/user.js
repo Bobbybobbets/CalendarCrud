@@ -79,18 +79,75 @@ exports.getEvents = function(req, res){
  */
 exports.create = function(req, res)
 {
-  var newUser = new User({
-    FirstName : req.body.firstname,
-    LastName : req.body.lastname,
-    CreatedDate : new Date(),
-    LastChangedDate : new Date()
-  });
+  orm.connect("mysql://root:root@localhost:8889/FoxCode", function(err, db){
+    if(err) console.log(err);
 
-  newUser.save(function(err){
-    console.log("User created", err);
-  });
+    db.load('./models/models', function(err){
+      if(err) console.log(err);
+    });
 
-  db.sync(function(err){
-    if(err) throw err;
+    var newUser = new db.models.User({
+      FirstName : req.body.first_name,
+      LastName : req.body.last_name,
+      CreatedDate : new Date(),
+      LastChangedDate : new Date()
+    });
+
+    newUser.save(function(err){
+      if(err) console.log(err);
+      else console.log("User created");
+    });
+
+    db.sync(function(err){
+      if(err) throw err;
+
+      res.send({User : newUser});
+    });
+  });
+};
+
+exports.addEvent = function(req, res)
+{
+  orm.connect("mysql://root:root@localhost:8889/FoxCode", function(err, db){
+    if(err) console.log(err);
+
+    db.load('./models/models', function(err){
+      if(err) console.log(err);
+    });
+
+    console.log(req.params.userid);
+    var userID = req.params.userid;
+
+    db.models.User.get(userID, function(err, user){
+      if(err){
+         console.log(err);
+         res.send(404);
+      }
+      else{
+        var newEvent = new db.models.Event({
+          UserFK : user.id,
+          CategoryFK : req.body.category,
+          TypeFK : req.body.type,
+          Subject : req.body.subject,
+          Location : req.body.location,
+          EventDate : req.body.event_date,
+          Description : req.body.description,
+          Important : req.body.important,
+          CreatedDate : new Date(),
+          LastchangedDate : new Date()
+        });
+
+        newEvent.save(function(err){
+          if(err) console.log(err);
+          else console.log("Event added");
+        });
+
+        db.sync(function(err){
+          if(err) throw err;
+
+          res.send({Event : newEvent});
+        });
+      }
+    });
   });
 };

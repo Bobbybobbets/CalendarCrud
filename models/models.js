@@ -8,7 +8,7 @@ module.exports = function(db, cb){
         LastChangedDate : Date
     });
 
-    var events = db.define('Events', {
+    var events = db.define('Event', {
         Subject             : String,
         Location            : String,
         EventDate           : Date,

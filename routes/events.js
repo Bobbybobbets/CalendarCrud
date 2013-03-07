@@ -24,7 +24,7 @@ exports.get = function(req, res){
       if(!err){
         res.send({event : event});
       }
-      else{
+      else{   
         res.send(404);
       }
     });
@@ -82,6 +82,52 @@ exports.getTypes = function(req, res){
 
     db.models.Type.find({}, function(err, types){
       res.send({types : types});
+    });
+  });
+};
+
+exports.createCategory = function(req, res){
+  orm.connect("mysql://root:root@localhost:8889/FoxCode", function(err, db){
+    db.load('./models/models', function(err){console.log(err);});
+
+    var newCategory = new db.models.Category({
+      CategoryName : req.body.category_name,
+      CreatedDate : new Date(),
+      LastChangedDate : new Date()
+    });
+
+    newCategory.save(function(err){
+      if(err)console.log(err);
+    });
+
+    db.sync(function(err){
+      if(err) console.log(err);
+      else{
+        res.send({Category : newCategory});
+      }
+    });
+  });
+};
+
+exports.createType = function(req, res){
+  orm.connect("mysql://root:root@localhost:8889/FoxCode", function(err, db){
+    db.load('./models/models', function(err){});
+
+    var newType = new db.models.Type({
+      TypeName : req.body.type_name,
+      CreatedDate : new Date(),
+      LastChangedDate : new Date()
+    });
+
+    newType.save(function(err){
+      if(err)console.log(err);
+    });
+
+    db.sync(function(err){
+      if(err) console.log(err);
+      else{
+        res.send({Type : newType});
+      }
     });
   });
 };
