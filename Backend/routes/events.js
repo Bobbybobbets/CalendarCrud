@@ -8,8 +8,8 @@ exports.list = function(req, res){
   orm.connect("mysql://root:root@localhost:8889/FoxCode", function(err, db){
     db.load('./models/models', function(err){});
 
-    db.models.Events.find({}, function(err, events){
-      res.send({events : events});
+    db.models.Event.find({}, function(err, events){
+      res.send({events: events});
     });
   });
 };
@@ -20,7 +20,7 @@ exports.get = function(req, res){
 
     var eventID = req.params.eventid;
 
-    db.models.Events.get(eventID, function(err, event){
+    db.models.Event.get(eventID, function(err, event){
       if(!err){
         res.send({event : event});
       }
@@ -41,27 +41,25 @@ exports.getInInterval = function(req, res){
     var time1 = parseInt(req.params.time1);
     var time2 = parseInt(req.params.time2);
 
-    if(isNaN(time1)){
-      console.log("time1 is undefined");
-      time1 = new Date(0);
-    }
-    else{
+    if(!isNaN(time1)){
       time1 = new Date(time1);
     }
 
-    if(isNaN(time2)){
-      console.log("time1 is undefined");
-      time2 = new Date();
-    }
-    else{
+    if(!isNaN(time2)){
       time2 = new Date(time2);
     }
 
-    db.models.Events.find({
-      EventDate : orm.between(time1, time2)
-    }, function(err, userEvents)
+    var where = {};
+
+    if(!isNaN(time1) && !isNaN(time2))
     {
-      res.send({user_events : userEvents});
+      where.StartDate = orm.between(time1, time2);
+    }
+
+    db.models.Event.find(
+      where, 
+      function(err, userEvents){
+        res.send({user_events : userEvents});
     });
   });
 };

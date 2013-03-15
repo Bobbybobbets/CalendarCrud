@@ -44,37 +44,58 @@ exports.getEvents = function(req, res){
     var time1 = parseInt(req.params.time1);
     var time2 = parseInt(req.params.time2);
 
-    if(isNaN(time1)){
-      console.log("time1 is undefined");
-      time1 = new Date(0);
-    }
-    else{
+    if(!isNaN(time1)){
       time1 = new Date(time1);
-    }
+    };
 
-    if(isNaN(time2)){
-      console.log("time1 is undefined");
-      time2 = new Date();
-    }
-    else{
+    if(!isNaN(time2)){
       time2 = new Date(time2);
     }
 
-    console.log(time1);
-    console.log(time2);
+    var where = {
+      UserFK : userid
+    };
+
+    if(!isNaN(time1) && !isNaN(time2))
+    {
+      where.StartDate = orm.between(time1, time2);
+    }
+
     db.models.User.get(userid, function(err, user){
-      db.models.Events.find({
-        UserFK : user.id,
-        EventDate : orm.between(time1, time2)
-      }, function(err, userEvents)
-      {
-        res.send({user_events : userEvents});
+      db.models.Event.find(
+        where, 
+        function(err, userEvents){
+          if(err) {
+            console.log(err);
+            res.send(404);
+          }
+          res.send({events : userEvents});
       });
     });
   });
 };
 
-/*
+exports.getEvent = function(req, res){
+  orm.connect("mysql://root:root@localhost:8889/FoxCode", function(err, db){
+    db.load('./models/models', function(err){});
+
+    var userid = req.params.userid;
+    var eventid = req.params.eventid;
+
+    db.models.User.get(userid, function(err, user){
+      db.models.Event.get(eventid, 
+        function(err, userEvent){
+          if(err) {
+            console.log(err);
+            res.send(404);
+          }
+          res.send({event : userEvent});
+      });
+    });
+  });
+};
+
+/*  
   Create new user
  */
 exports.create = function(req, res)
@@ -124,13 +145,19 @@ exports.addEvent = function(req, res)
          res.send(404);
       }
       else{
+        console.log(req.body.start_date);
+        console.log(req.body.end_date);
+        console.log(new Date(req.body.start_date));
+        console.log(new Date(req.body.end_date));
+
         var newEvent = new db.models.Event({
           UserFK : user.id,
           CategoryFK : req.body.category,
           TypeFK : req.body.type,
           Subject : req.body.subject,
           Location : req.body.location,
-          EventDate : req.body.event_date,
+          StartDate : req.body.start_date,
+          EndDate : req.body.end_date,
           Description : req.body.description,
           Important : req.body.important,
           CreatedDate : new Date(),
@@ -151,3 +178,87 @@ exports.addEvent = function(req, res)
     });
   });
 };
+exports.modifyEvent = function(req, res)
+{
+  orm.connect("mysql://root:root@localhost:8889/FoxCode", function(err, db){
+    if(err) console.log(err);
+
+    db.load('./models/models', function(err){
+      if(err) console.log(err);
+    });
+
+    console.log(req.params.userid);
+    console.log("test");
+    var userID = req.params.userid;
+    var eventID = req.params.eventid;
+
+    db.models.User.get(userID, function(err, user){
+      if(err){
+         console.log(err);
+         res.send(404);
+      }
+      else{
+        console.log(req.body.start_date);
+        console.log(req.body.end_date);
+        console.log(new Date(req.body.start_date));
+        console.log(new Date(req.body.end_date));
+
+        db.models.Event.get(eventID,
+          function(err, event){
+            event.CategoryFK = req.body.category;
+            event.TypeFK = req.body.type;
+            event.Subject = req.body.subject;
+            event.Location = req.body.location;
+            event.StartDate = new Date(req.body.start_date);
+            event.EndDate = new Date(req.body.end_date);
+            event.Description = req.body.description;
+            event.Important = req.body.important,
+            event.LastchangedDate = new Date();
+
+            event.save(function(err){
+              if(err) console.log(err);
+              else console.log("Event modified");
+
+              db.sync(function(err){
+                if(err) console.log(err);
+
+                res.send({Event : event});
+              });
+            });
+        });
+      }
+    });
+  });
+};
+exports.deleteEvent = function(req, res)
+{
+  orm.connect("mysql://root:root@localhost:8889/FoxCode", function(err, db){
+    if(err) console.log(err);
+
+    db.load('./models/models', function(err){
+      if(err) console.log(err);
+    });
+
+    var userID = req.params.userid;
+    var eventID = req.params.eventid;
+
+    db.models.User.get(userID, function(err, user){
+      if(err){
+         console.log(err);
+         res.send(404);
+      }
+      else{
+        db.models.Event.get(eventID,
+          function(err, event){
+            event.remove(function(err){
+              db.sync(function(err){
+                if(err) console.log(err);
+                else console.log("event deleted");
+              });
+            });
+          });
+      }
+    });
+  });
+};
+

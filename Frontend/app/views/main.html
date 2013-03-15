@@ -1,3 +1,138 @@
 <div><!-- class="hero-unit">-->
-  <div ui-calendar="{height: 450,editable: true}" class="span8 calendar" ng-model="eventSources"></div>
+    <!--<div id="calendar" ui-calendar="uiConfig.fullCalendar" class="span8 calendar" equals-tracker="equalsTracker" ng-model="eventSources"></div>-->
+    <div id="calendar" class="span8 calendar"></div>
+    <div class="span4"></div>
+    <div class="row span8">
+        <a href="#newEventModal" role="button" class="btn" data-toggle="modal">New event</a>
+    </div>
 </div>
+
+<!--new event modal-->
+<div id="newEventModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="newEventModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">New event</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal">
+    <div class="control-group">
+        <label class="control-label" for="inputSubject">Subject</label>
+        <div class="controls">
+            <input type="text" id="inputSubject" placeholder="Subject" ng-model="inputSubject">
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="inputLocation">Location</label>
+        <div class="controls">
+            <input type="text" id="inputLocation" placeholder="Location" ng-model="inputLocation">
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="inputStartDate">Start date</label>
+        <div class="controls">
+            <input type="text" id="inputStartDate" data-date-format="yyyy-mm-dd" placeholder="Start date" class="datepicker" ng-model="inputStartDate" bs-datepicker>
+            <input type="text" id="inputStartTime" placeholder="Start time" class="timepicker" ng-model="inputStartTime" bs-timepicker>
+            
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="inputEndDate">End date</label>
+        <div class="controls">
+            <input type="text" id="inputEndDate" data-date-format="yyyy-mm-dd" placeholder="End date" class="datepicker" ng-model="inputEndDate" bs-datepicker>
+            <input type="text" id="inputEndTime" placeholder="End time" class="timepicker" ng-model="inputEndTime" bs-timepicker>
+
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="inputDescription">Description</label>
+        <div class="controls">
+            <input type="text" id="inputDescription" placeholder="Description" ng-model="inputDescription">
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="inputImportant">Important</label>
+        <div class="controls">
+            <input checked type="checkbox" id="inputImportant" ng-model="inputImportant">
+        </div>
+    </div>
+</form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        <button class="btn btn-primary" ng-click="addNewEvent()" data-dismiss="modal">Create new event</button>
+    </div>
+</div>
+
+<!--modify modal -->
+<div id="modifyEventModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="modifyEventModalLabel">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Modify event</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal">
+    <div class="control-group">
+        <label class="control-label" for="inputSubject">ID</label>
+        <div class="controls">
+            <input type="text" id="inputID" ng-model="inputID" disabled>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="inputSubject">Subject</label>
+        <div class="controls">
+            <input type="text" id="inputSubject" placeholder="Subject" ng-model="inputSubject">
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="inputLocation">Location</label>
+        <div class="controls">
+            <input type="text" id="inputLocation" placeholder="Location" ng-model="inputLocation">
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="inputStartDate">Start date</label>
+        <div class="controls">
+            <input type="text" id="inputStartDate" data-date-format="yyyy-mm-dd" placeholder="Start date" class="datepicker" ng-model="inputStartDate" bs-datepicker>
+            <input type="text" id="inputStartTime" placeholder="Start time" class="timepicker" ng-model="inputStartTime" bs-timepicker>
+            
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="inputEndDate">End date</label>
+        <div class="controls">
+            <input type="text" id="inputEndDate" data-date-format="yyyy-mm-dd" placeholder="End date" class="datepicker" ng-model="inputEndDate" bs-datepicker>
+            <input type="text" id="inputEndTime" placeholder="End time" class="timepicker" ng-model="inputEndTime" bs-timepicker>
+
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="inputDescription">Description</label>
+        <div class="controls">
+            <input type="text" id="inputDescription" placeholder="Description" ng-model="inputDescription">
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="inputImportant">Important</label>
+        <div class="controls">
+            <input checked type="checkbox" id="inputImportant" ng-model="inputImportant">
+        </div>
+    </div>
+</form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        <button class="btn" data-dismiss="modal" ng-click="deleteEvent()">Delete event</button>
+        <button class="btn btn-primary" ng-click="modifyEvent()" data-dismiss="modal">Modify event</button>
+    </div>
+</div>
+

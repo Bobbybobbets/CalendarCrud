@@ -1,6 +1,6 @@
 'use strict';
 
-var FrontendApp = angular.module('FrontendApp', ['ui'])
+var FrontendApp = angular.module('FrontendApp', ['ui', 'ngResource', '$strap.directives'])
   .config(['$routeProvider', function($routeProvider) {
     $routeProvider
       .when('/', {

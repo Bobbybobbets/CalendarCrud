@@ -1,3 +1,16 @@
+var allowCrossDomain = function(req, res, next){
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+
+  // intercept OPTIONS method
+  if ('OPTIONS' == req.method) {
+    res.send(200);
+  }
+  else {
+    next();
+  }
+};
 
 /**
  * Module dependencies.
@@ -19,6 +32,7 @@ app.configure(function(){
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
   app.set('db_host', 'mysql://root:root@localhost:8889/FoxCode');
+  app.use(allowCrossDomain);
   app.use(express.favicon());
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
@@ -35,6 +49,7 @@ app.get('/', routes.index);
 app.get('/users', user.list);
 app.get('/users/:userid', user.get);
 app.get('/users/:userid/events', user.getEvents);
+app.get('/users/:userid/events/:eventid', user.getEvent);
 app.get('/users/:userid/events/:time1/:time2', user.getEvents);
 app.get('/events', events.list);
 app.get('/events/:time1/:time2', events.getInInterval);
@@ -43,8 +58,10 @@ app.get('/events/types', events.getTypes);
 app.get('/events/:eventid', events.get);
 app.post('/users', user.create);
 app.post('/users/:userid/events', user.addEvent);
+app.post('/users/:userid/events/:eventid', user.modifyEvent);
 app.post('/events/categories', events.createCategory);
 app.post('/events/types', events.createType);
+app.delete('/users/:userid/events/:eventid', user.deleteEvent);
 
 //loading and syncing application models
 orm.connect("mysql://root:root@localhost:8889/FoxCode", function(err, db){  
@@ -60,3 +77,5 @@ orm.connect("mysql://root:root@localhost:8889/FoxCode", function(err, db){
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });
+
+

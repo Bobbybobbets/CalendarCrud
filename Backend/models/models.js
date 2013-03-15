@@ -11,7 +11,8 @@ module.exports = function(db, cb){
     var events = db.define('Event', {
         Subject             : String,
         Location            : String,
-        EventDate           : Date,
+        StartDate           : Date,
+        EndDate             : Date,
         Description         : {type: "text", size: 1000},
         Important           : Boolean,
         CreatedDate         : Date,
