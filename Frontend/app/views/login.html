@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<script type="text/javascript">
+  // set a count, it will allows for 3 attempts
+	var count = 2;
+	function validate() {
+		var un = document.login.user.value;
+		var pw = document.login.password.value;
+		var valid = false;
+		
+		var unArray = ["ltowers", "ppaquette"];  // valid users
+		var pwArray = ["12345", "54321"];  // the corresponding valid passwords;
+		
+		for (var i=0; i <unArray.length; i++) {
+			if ((un == unArray[i]) && (pw == pwArray[i])) {
+				valid = true;
+			break;
+		}
+	}
+	
+	if (valid) {
+		alert ("Login was successful");
+		window.location.href = "../404.html";
+		return false;
+	}
+	
+	var t = " tries";
+	if (count == 1) {t = " try"}
+	
+	if (count >= 1) {
+		alert ("Invalid username and/or password.  You have " + count + t + " left.");
+		document.login.user.value = "";
+		document.login.password.value = "";
+		setTimeout("document.login.user.focus()", 25);
+		setTimeout("document.login.user.select()", 25);
+		count --;
+	}
+	
+	else {
+	alert ("Still incorrect! You have no more tries left!");
+	document.login.user.value = "No more tries allowed!";
+	document.login.password.value = "XXXXXXXXXX";
+	document.login.user.disabled = true;
+	document.login.password.disabled = true;
+	return false;
+	}
+	
+	}
+	
+</script>	
+
+</head>
+
+<body>
+	<h1>FoxCode Calendar</h1>  
+	<form name="login" accept-charset="utf-8">  
+        <label for="usermail">Email</label>  
+        <input type="text" name="user" placeholder="Enter username" required>  
+        <label for="password">Password</label>  
+        <input type="password" name="password" placeholder="Enter password" required>       
+        <input type="button" value="Login" name="Submit" onclick= "validate()">    
+	</form>  
+</body>
+
+</html>
