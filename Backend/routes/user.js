@@ -22,7 +22,7 @@ exports.login =  function(req, res){
   orm.connect("mysql://root:root@localhost:8889/FoxCode", function(err, db){
     db.load('./models/models', function(err){});
     
-    db.models.User.get(req.params.userid, req.params.password, function(err, user){
+    db.models.User.get(req.params.username, req.params.password, function(err, user){
       if(!err){
         res.send(user);
       }
