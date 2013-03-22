@@ -48,7 +48,6 @@ app.configure('development', function(){
 
 app.get('/', routes.index);
 app.get('/users', user.list);
-app.get('/users/:username/:password', user.login)
 app.get('/users/:userid', user.get);
 app.get('/users/:userid/events', user.getEvents);
 app.get('/users/:userid/events/:eventid', user.getEvent);
@@ -58,6 +57,7 @@ app.get('/events/:time1/:time2', events.getInInterval);
 app.get('/events/categories', events.getCategories);
 app.get('/events/types', events.getTypes);
 app.get('/events/:eventid', events.get);
+app.post('/users/:username/:password', user.login);
 app.post('/users', user.create);
 app.post('/users/:userid/events', user.addEvent);
 app.post('/users/:userid/events/:eventid', user.modifyEvent);
