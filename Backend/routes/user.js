@@ -22,12 +22,12 @@ exports.login =  function(req, res){
   orm.connect("mysql://root:root@localhost:8889/FoxCode", function(err, db){
     db.load('./models/models', function(err){});
     
-    db.models.User.get(req.params.username, req.params.password, function(err, user){
-      if(!err){
-        res.redirect("/users");
-      }
-      else{
-        res.redirect("404.html");
+    db.models.User.find({ username: req.params.username, password: req.params.password }, function(User){
+      if (User === null) {
+  		  return console.log("User does not exist!");
+		  }
+      else {
+        res.redirect("index.html");
       }
     });
   });
