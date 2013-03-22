@@ -22,6 +22,7 @@ var express = require('express')
   , events = require('./routes/events')
   , http = require('http')
   , path = require('path')
+  , bcrypt = require("bcrypt") //hashing algorithm
   , orm = require('orm');
 
 
@@ -78,4 +79,27 @@ http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });
 
-
+// login function
+app.post("/login", function(req, res){
+  var username = req.body.username;
+	var password = req.body.password;
+	//Search the Database for a User with the given username
+	User.find({username: username}, function(err, users){
+		//we couldn't find a user with that name
+		if(err || users.length==0){
+			res.redirect("/?error=invalid username or password");	
+			return;
+		}
+		
+		var user = users[0];
+		//compare the hash we have for the user with what this password hashes to
+		bcrypt.compare(password, user.password, function(err, authenticated){
+			if(authenticated){
+				req.session.username = user.username;
+				res.redirect("/users");
+			}else{
+				res.redirect("/?error=invalid username or password");	
+			}
+		});
+	});
+});
