@@ -81,7 +81,7 @@ http.createServer(app).listen(app.get('port'), function(){
 
 // login function
 app.post("/login", function(req, res){
-  var username = req.body.username;
+  	var username = req.body.username;
 	var password = req.body.password;
 	//Search the Database for a User with the given username
 	User.find({username: username}, function(err, users){
