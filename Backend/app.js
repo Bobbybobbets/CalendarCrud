@@ -48,7 +48,7 @@ app.configure('development', function(){
 
 app.get('/', routes.index);
 app.get('/users', user.list);
-app.get('/users/:username/:password')
+app.get('/users/:username/:password', user.login)
 app.get('/users/:userid', user.get);
 app.get('/users/:userid/events', user.getEvents);
 app.get('/users/:userid/events/:eventid', user.getEvent);
