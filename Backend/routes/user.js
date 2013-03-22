@@ -24,7 +24,7 @@ exports.login =  function(req, res){
     
     db.models.User.get(req.params.username, req.params.password, function(err, user){
       if(!err){
-        res.send(user);
+        res.redirect("/users");
       }
       else{
         res.send(404);
