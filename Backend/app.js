@@ -58,6 +58,7 @@ app.get('/events/categories', events.getCategories);
 app.get('/events/types', events.getTypes);
 app.get('/events/:eventid', events.get);
 app.post('/users', user.create);
+app.post('/');
 app.post('/users/:userid/events', user.addEvent);
 app.post('/users/:userid/events/:eventid', user.modifyEvent);
 app.post('/events/categories', events.createCategory);
@@ -77,29 +78,4 @@ orm.connect("mysql://root:root@localhost:8889/FoxCode", function(err, db){
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
-});
-
-// login function
-app.post("/login", function(req, res){
-  	var username = req.body.username;
-	var password = req.body.password;
-	//Search the Database for a User with the given username
-	User.find({username: username}, function(err, users){
-		//we couldn't find a user with that name
-		if(err || users.length==0){
-			res.redirect("/?error=invalid username or password");	
-			return;
-		}
-		
-		var user = users[0];
-		//compare the hash we have for the user with what this password hashes to
-		bcrypt.compare(password, user.password, function(err, authenticated){
-			if(authenticated){
-				req.session.username = user.username;
-				res.redirect("/users");
-			}else{
-				res.redirect("/?error=invalid username or password");	
-			}
-		});
-	});
 });
