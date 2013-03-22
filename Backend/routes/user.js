@@ -24,8 +24,8 @@ exports.login =  function(req, res){
     
     db.models.User.find({ username: req.params.username, password: req.params.password }, function(User){
       if (User === null) {
-  		  return console.log("User does not exist!");
-		  }
+  	return console.log("User does not exist!");
+      }
       else {
         res.redirect("index.html");
       }
