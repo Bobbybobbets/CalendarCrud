@@ -27,7 +27,7 @@ exports.login =  function(req, res){
         res.redirect("/users");
       }
       else{
-        res.send(404);
+        res.redirect("404.html");
       }
     });
   });
