@@ -7,59 +7,100 @@ FrontendApp.controller('MainCtrl', function($scope, datamodel) {
     var y = date.getFullYear();
 
     $scope.events = [];
+    $scope.eventCategories = [];
+    $scope.filteredEvents = [];
     $scope.eventSources = [];
     $scope.equalsTracker = 0;
     $scope.inputImportant = false;
+    $scope.userid = 1;
     $('.datepicker').datepicker();
     $('.timepicker').timepicker({
         showMeridian : false,
     });
 
-    
-    datamodel.Event.get({time1: "", time2: ""}, function(data){
-        $scope.events = (_.map(data.events, function(event){
-            
-            return {
-                id: event.id,
-                title: event.Subject,
-                start: new Date(event.StartDate),
-                end: new Date(event.EndDate)
-            };
-        }));
+    $("#calendar").fullCalendar({
+        height: 450,
+        editable: true,
+        header:{
+            left: 'prev,next today',
+            center: 'title',
+            right: 'month,agendaWeek,agendaDay'
+        },
+        eventSources: $scope.eventSources,
+        eventClick: function(event, jsEvent, view){
+            var e = datamodel.Event.get({
+                userid: $scope.userid,
+                eventid: event.id
+            }, function(){
+                var startDate = new Date(e.StartDate);
+                var endDate = new Date(e.EndDate);
 
-
-        $("#calendar").fullCalendar({
-            height: 450,
-            editable: true,
-            header:{
-                left: 'prev,next today',
-                center: 'title',
-                right: 'month,agendaWeek,agendaDay'
-            },
-            events: $scope.events,
-            eventClick: function(event, jsEvent, view){
-                var e = datamodel.Event.get({
-                    eventid: event.id
-                }, function(){
-                    e = e.event;
-                    var startDate = new Date(e.StartDate);
-                    var endDate = new Date(e.EndDate);
-
-                    $scope.inputID = e.id;
-                    $scope.inputSubject = e.Subject;
-                    $scope.inputLocation = e.Location;
-                    $scope.inputStartDate = startDate.toString("yyyy-MM-dd");
-                    $scope.inputStartTime = startDate.toString("HH:mm");
-                    $scope.inputEndDate = endDate.toString("yyyy-MM-dd");
-                    $scope.inputEndTime = endDate.toString("HH:mm");
-                    $scope.inputDescription = e.Description;
-                    $scope.inputImportant = e.Important;
-                    $("#modifyEventModal").modal('toggle');
-                    $("#modifyEventModal").modal('show');
-                });
-            }
-        });
+                $scope.inputID = e.id;
+                $scope.inputSubject = e.Subject;
+                $scope.inputCategory = e.CategoryFK.id; 
+                $scope.inputLocation = e.Location;
+                $scope.inputStartDate = startDate.toString("yyyy-MM-dd");
+                $scope.inputStartTime = startDate.toString("HH:mm");
+                $scope.inputEndDate = endDate.toString("yyyy-MM-dd");
+                $scope.inputEndTime = endDate.toString("HH:mm");
+                $scope.inputDescription = e.Description;
+                $scope.inputImportant = e.Important;
+                $("#modifyEventModal").modal('toggle');
+                $("#modifyEventModal").modal('show');
+            });
+        }
     });
+    
+    $scope.fetchEvents = function(start, end){
+        var userid = 1;
+
+        $scope.fetchCategories();
+        datamodel.Event.query({userid: userid, time1: start, time2: end}, function(data){
+            $scope.events = (_.map(data, function(event){
+                
+                return {
+                    id: event.id,
+                    title: event.Subject,
+                    category: event.CategoryFK.id,
+                    color: event.CategoryFK.Color,
+                    start: new Date(event.StartDate),
+                    end: new Date(event.EndDate)
+                };
+            }));
+
+            $scope.renderCalendar();
+        });
+    };
+
+    $scope.fetchCategories = function(){
+        var userid = 1;
+
+        datamodel.Category.query({userid: userid}, function(data){
+            $scope.eventCategories = (_.map(data, function(category){
+                category.Checked = true;
+                return category;
+            }));
+        });
+    };
+
+    $scope.renderCalendar = function(){
+        $scope.filteredEvents = [];
+
+        for(var i = 0; i < $scope.eventCategories.length; i++){
+            var category = $scope.eventCategories[i];
+            if(category.Checked){
+                for(var j = 0; j < $scope.events.length; j++){
+                    var event = $scope.events[j];
+                    if(event.category == category.id){
+                        $scope.filteredEvents.push(event);
+                    }
+                }
+            }
+        }
+
+        $("#calendar").fullCalendar("removeEvents");
+        $("#calendar").fullCalendar("addEventSource", $scope.filteredEvents);
+    };
 
     $scope.remove = function(index) {
         $scope.events.splice(index,1);
@@ -67,7 +108,7 @@ FrontendApp.controller('MainCtrl', function($scope, datamodel) {
 
     $scope.addNewEvent = function(){
         var newEvent = new datamodel.Event({
-            category : 1,
+            category : $scope.inputCategory,
             type : 1,
             subject : $scope.inputSubject,
             location : $scope.inputLocation,
@@ -77,7 +118,7 @@ FrontendApp.controller('MainCtrl', function($scope, datamodel) {
             important : $scope.inputImportant
         });
 
-        newEvent.$save(function(data){
+        newEvent.$save({userid: $scope.userid}, function(data){
             var e = {
                 id: data.id,
                 title: data.Subject,
@@ -85,9 +126,8 @@ FrontendApp.controller('MainCtrl', function($scope, datamodel) {
                 end: data.EndDate
             };
 
-            $scope.events.push(e);
-            $("#calendar").fullCalendar('renderEvent', e);
-            console.log(data);
+            $scope.fetchEvents();
+            //$("#calendar").fullCalendar('renderEvent', e);
         });
     };
     $scope.modifyEvent = function(){
@@ -104,7 +144,10 @@ FrontendApp.controller('MainCtrl', function($scope, datamodel) {
         });
 
         event.$save({
+            userid: $scope.userid,
             eventid : $scope.inputID
+        }, function(data){
+            $scope.fetchEvents();
         });
     };
     $scope.deleteEvent = function(){
@@ -112,6 +155,8 @@ FrontendApp.controller('MainCtrl', function($scope, datamodel) {
         datamodel.Event.delete({
             eventid: $scope.inputID
         });
+
+        $scope.fetchEvents();
     };
 
 
@@ -126,4 +171,7 @@ FrontendApp.controller('MainCtrl', function($scope, datamodel) {
             }
         }
     };
+
+    $scope.fetchEvents();
+    $scope.fetchCategories();
 });

@@ -4,6 +4,8 @@ module.exports = function(db, cb){
     var user = db.define('User', {
         FirstName       : String,
         LastName        : String,
+        Username        : String,
+        Password        : {type: "text", size: 60},
         CreatedDate     : Date,
         LastChangedDate : Date
     });
@@ -17,6 +19,8 @@ module.exports = function(db, cb){
         Important           : Boolean,
         CreatedDate         : Date,
         LastChangedDate     : Date
+    },{
+        autoFetch: true
     });
 
     var type = db.define('Type', {
@@ -27,10 +31,10 @@ module.exports = function(db, cb){
 
     var category = db.define('Category', {
         CategoryName    : String,
+        Color           : String,
         CreatedDate     : Date,
         LastChangedDate : Date
     });
-
 
     events.hasOne("UserFK", user, {
       reverse : "Events"
@@ -41,6 +45,8 @@ module.exports = function(db, cb){
     user.hasOne("LastChangedBy", user);
     type.hasOne("LastChangedBy", user);
     category.hasOne("LastChangedBy", user);
+    category.hasOne("UserFK", user);
+
 
     db.sync(function(err){
         if(err) throw err;

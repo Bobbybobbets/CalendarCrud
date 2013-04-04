@@ -1,42 +1,54 @@
-<form class="form-horizontal">
+
     <div class="control-group">
         <label class="control-label" for="inputSubject">Subject</label>
         <div class="controls">
-            <input type="text" id="inputSubject" placeholder="Subject">
+            <input type="text" id="inputSubject" placeholder="Subject" ng-model="inputSubject">
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="inputCategory">Category</label>
+        <div class="controls">
+            <select ng-options="category.id as category.CategoryName for category in eventCategories" ng-model="inputCategory">
+            </select>
         </div>
     </div>
 
     <div class="control-group">
         <label class="control-label" for="inputLocation">Location</label>
         <div class="controls">
-            <input type="text" id="inputLocation" placeholder="Location">
+            <input type="text" id="inputLocation" placeholder="Location" ng-model="inputLocation">
         </div>
     </div>
 
     <div class="control-group">
         <label class="control-label" for="inputStartDate">Start date</label>
         <div class="controls">
-            <input type="text" id="inputStartDate" placeholder="Start date" class="datepicker">
+            <input type="text" id="inputStartDate" data-date-format="yyyy-mm-dd" placeholder="Start date" class="datepicker" ng-model="inputStartDate" bs-datepicker>
+            <input type="text" id="inputStartTime" placeholder="Start time" class="timepicker" ng-model="inputStartTime" bs-timepicker>
+            
         </div>
     </div>
 
     <div class="control-group">
         <label class="control-label" for="inputEndDate">End date</label>
         <div class="controls">
-            <input type="text" id="inputEndDate" placeholder="End date" class="datepicker">
+            <input type="text" id="inputEndDate" data-date-format="yyyy-mm-dd" placeholder="End date" class="datepicker" ng-model="inputEndDate" bs-datepicker>
+            <input type="text" id="inputEndTime" placeholder="End time" class="timepicker" ng-model="inputEndTime" bs-timepicker>
+
         </div>
     </div>
 
     <div class="control-group">
         <label class="control-label" for="inputDescription">Description</label>
         <div class="controls">
-            <input type="text" id="inputDescription" placeholder="Description">
+            <input type="text" id="inputDescription" placeholder="Description" ng-model="inputDescription">
         </div>
     </div>
 
     <div class="control-group">
-        <label class="checkbox">
-            <input type="checkbox" id="inputImportant"> Important
-        </label>
+        <label class="control-label" for="inputImportant">Important</label>
+        <div class="controls">
+            <input checked type="checkbox" id="inputImportant" ng-model="inputImportant">
+        </div>
     </div>
-</form>

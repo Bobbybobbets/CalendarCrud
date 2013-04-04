@@ -1,5 +1,5 @@
 var orm = require("orm");
-
+var config = require("../config");
 
 /*
  * GET users listing.
@@ -86,7 +86,7 @@ exports.getEvents = function(req, res){
             console.log(err);
             res.send(404);
           }
-          res.send({events : userEvents});
+          res.send(userEvents);
       });
     });
   });
@@ -106,7 +106,7 @@ exports.getEvent = function(req, res){
             console.log(err);
             res.send(404);
           }
-          res.send({event : userEvent});
+          res.send(userEvent);
       });
     });
   });
@@ -147,13 +147,14 @@ exports.create = function(req, res)
 exports.addEvent = function(req, res)
 {
   orm.connect("mysql://root:root@localhost:8889/FoxCode", function(err, db){
+
     if(err) console.log(err);
 
     db.load('./models/models', function(err){
       if(err) console.log(err);
     });
 
-    console.log(req.params.userid);
+    //console.log(req.params.userid);
     var userID = req.params.userid;
 
     db.models.User.get(userID, function(err, user){
@@ -173,8 +174,8 @@ exports.addEvent = function(req, res)
           TypeFK : req.body.type,
           Subject : req.body.subject,
           Location : req.body.location,
-          StartDate : req.body.start_date,
-          EndDate : req.body.end_date,
+          StartDate : new Date(req.body.start_date),
+          EndDate : new Date(req.body.end_date),
           Description : req.body.description,
           Important : req.body.important,
           CreatedDate : new Date(),
@@ -195,6 +196,7 @@ exports.addEvent = function(req, res)
     });
   });
 };
+
 exports.modifyEvent = function(req, res)
 {
   orm.connect("mysql://root:root@localhost:8889/FoxCode", function(err, db){
@@ -276,6 +278,31 @@ exports.deleteEvent = function(req, res)
           });
       }
     });
+  });
+};
+exports.getEventCategories = function(req, res)
+{
+  orm.connect(config.get("db_host"), function(err, db){
+    db.load(config.get("url_models"), function(err){});
+
+
+    var userID = req.params.userid;
+
+
+    db.models.User.get(userID, function(err, user){
+      db.models.Category.find({
+        UserFK : userID
+      }, function(err, categories)
+      {
+        res.send(categories);
+      });
+    });
+  });
+};
+exports.addEventCategory = function(req, res)
+{
+  orm.connect(config.get("db_host"), function(err, db){
+
   });
 };
 

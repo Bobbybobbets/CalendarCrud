@@ -129,3 +129,4 @@ exports.createType = function(req, res){
     });
   });
 };
+

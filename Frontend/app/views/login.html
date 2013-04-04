@@ -1,68 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-
-<script type="text/javascript">
-  // set a count, it will allows for 3 attempts
-	var count = 2;
-	function validate() {
-		var un = document.login.user.value;
-		var pw = document.login.password.value;
-		var valid = false;
-		
-		var unArray = ["ltowers", "ppaquette"];  // valid users
-		var pwArray = ["12345", "54321"];  // the corresponding valid passwords;
-		
-		for (var i=0; i <unArray.length; i++) {
-			if ((un == unArray[i]) && (pw == pwArray[i])) {
-				valid = true;
-			break;
-		}
-	}
-	
-	if (valid) {
-		alert ("Login was successful");
-		window.location.href = "../404.html";
-		return false;
-	}
-	
-	var t = " tries";
-	if (count == 1) {t = " try"}
-	
-	if (count >= 1) {
-		alert ("Invalid username and/or password.  You have " + count + t + " left.");
-		document.login.user.value = "";
-		document.login.password.value = "";
-		setTimeout("document.login.user.focus()", 25);
-		setTimeout("document.login.user.select()", 25);
-		count --;
-	}
-	
-	else {
-	alert ("Still incorrect! You have no more tries left!");
-	document.login.user.value = "No more tries allowed!";
-	document.login.password.value = "XXXXXXXXXX";
-	document.login.user.disabled = true;
-	document.login.password.disabled = true;
-	return false;
-	}
-	
-	}
-	
-</script>	
-
-</head>
-
-<body>
-	<h1>FoxCode Calendar</h1>  
-	<form name="login" action="/login" method="post" accept-charset="utf-8">  
-        <label for="usermail">Email</label>  
-        <input type="text" name="user" placeholder="Enter username" required>  
-        <label for="password">Password</label>  
-        <input type="password" name="password" placeholder="Enter password" required>       
-        <input type="submit" value="Login" name="Submit">    
-	</form>  
-</body>
-
-</html>
+<div class="row">
+    <div class="span4 offset4">
+      <div class="well">
+        <legend>Sign in to WebApp</legend>
+        <form method="POST" action="" accept-charset="UTF-8">
+            <div class="alert alert-error hide">
+                <a class="close" data-dismiss="alert" href="#">x</a>Incorrect Username or Password!
+            </div>      
+            <input class="span3" placeholder="Username" type="text" name="username" ng-model="inputUsername">
+            <input class="span3" placeholder="Password" type="password" name="password" ng-model="inputPassword"> 
+            <label class="checkbox">
+                <input type="checkbox" name="remember" value="1"> Remember Me
+            </label>
+            <button class="btn-info btn" type="submit">Login</button>
+        </form>    
+      </div>
+    </div>
+</div>
