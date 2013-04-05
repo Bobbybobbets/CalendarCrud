@@ -17,15 +17,15 @@ var allowCrossDomain = function(req, res, next){
 
 var checkAuth = function(req, res, next){
   console.log(req.session);
-  if(!req.session.user_id && req.url != "/users/login"){
-    res.send(401);
+  console.log(req.cookies);
+  if(!req.session.username && req.url != "/users/login"){
+    //res.send(401);
+    next();
   }
   else{
     next();
   }
 };
-
-
 
 /**
  * Module dependencies.
@@ -45,24 +45,27 @@ config.set('db_host', 'mysql://root:root@localhost:8889/FoxCode');
 config.set('url_models', './models/models');
 
 var app = express();
-var memStore = express.session.MemoryStore;
+var MemoryStore = express.session.MemoryStore;
 
 app.configure(function(){
   app.set('port', process.env.PORT || 3001);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
-  app.use(express.cookieParser());
-  app.use(express.session({secret: 'secret_key', store : memStore({
-    reapInterval : 6000 * 10
-  })}));
   app.use(allowCrossDomain);
-  //app.use(checkAuth);
   app.use(express.favicon());
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
   app.use(express.methodOverride());
+  app.use(express.cookieParser());
+  app.use(express.cookieSession({ secret: 'keyboard cat', key: 'sid'}));
+  /*app.use(express.session({
+    secret: 'keyboard cat',
+    store: new MemoryStore({ reapInterval: 60000 * 10 })
+  }));*/
+  //app.use(checkAuth);
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));
+
 });
 
 app.configure('development', function(){
@@ -70,24 +73,24 @@ app.configure('development', function(){
 });
 
 app.get('/', routes.index);
-app.get('/users', user.list);
-app.get('/users/:userid', user.get);
-app.get('/users/:userid/events', user.getEvents);
-app.get('/users/:userid/events/categories', user.getEventCategories);
-app.get('/users/:userid/events/:eventid', user.getEvent);
-app.get('/users/:userid/events/:time1/:time2', user.getEvents);
-app.get('/events', events.list);
-app.get('/events/:time1/:time2', events.getInInterval);
-app.get('/events/categories', events.getCategories);
-app.get('/events/types', events.getTypes);
-app.get('/events/:eventid', events.get);
-app.post('/users/login', user.login);
-app.post('/users', user.create);
-app.post('/users/:userid/events', user.addEvent);
-app.post('/users/:userid/events/:eventid', user.modifyEvent);
-app.post('/events/categories', events.createCategory);
-app.post('/events/types', events.createType);
-app.delete('/users/:userid/events/:eventid', user.deleteEvent);
+app.get('/users', checkAuth, user.list);
+app.get('/users/:userid', checkAuth, user.get);
+app.get('/users/:userid/events', checkAuth, user.getEvents);
+app.get('/users/:userid/events/categories', checkAuth, user.getEventCategories);
+app.get('/users/:userid/events/:eventid', checkAuth, user.getEvent);
+app.get('/users/:userid/events/:time1/:time2', checkAuth, user.getEvents);
+app.get('/events', checkAuth, events.list);
+app.get('/events/:time1/:time2', checkAuth,events.getInInterval);
+app.get('/events/categories', checkAuth, events.getCategories);
+app.get('/events/types', checkAuth, events.getTypes);
+app.get('/events/:eventid', checkAuth, events.get);
+app.post('/users/login', checkAuth, user.login);
+app.post('/users', checkAuth, user.create);
+app.post('/users/:userid/events', checkAuth, user.addEvent);
+app.post('/users/:userid/events/:eventid', checkAuth, user.modifyEvent);
+app.post('/events/categories', checkAuth, events.createCategory);
+app.post('/events/types', checkAuth, events.createType);
+app.delete('/users/:userid/events/:eventid', checkAuth, user.deleteEvent);
 
 //loading and syncing application models
 orm.connect(config.get("db_host"), function(err, db){   

@@ -19,7 +19,7 @@ var FrontendApp = angular.module('FrontendApp', ['ui', 'ngResource', '$strap.dir
         redirectTo: '/'
       });
   }])
-  /*.config(['$httpProvider', function($httpProvider){
+  .config(['$httpProvider', function($httpProvider){
     var loginCheckInterceptor = ['$rootScope', '$q', '$location', function(scope, $q, $location){
 
       function success(response){
@@ -45,4 +45,4 @@ var FrontendApp = angular.module('FrontendApp', ['ui', 'ngResource', '$strap.dir
     }];
 
     $httpProvider.responseInterceptors.push(loginCheckInterceptor);
-  }])*/;
+  }]);

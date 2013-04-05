@@ -13,7 +13,7 @@
                     <div class="thumb-color-preview table table-bordered" style="background-color:{{category.Color}};"></div>
                 </div>
             </div>
-            <a href="#newEventModal" role="button" class="btn" data-toggle="modal">New event</a>
+            <a href="#newEventModal" role="button" class="btn" data-toggle="modal" ng-click="clearEventInfo()">New event</a>
         </div>
     </div>
     </div>
@@ -27,7 +27,60 @@
     </div>
     <div class="modal-body">
         <form class="form-horizontal">
-            <ng-include src="'views/partials/event_form.html'"></ng-include>
+            <!--<ng-include src="'views/partials/event_form.html'"></ng-include>-->
+                <div class="control-group">
+        <label class="control-label" for="inputSubject">Subject</label>
+        <div class="controls">
+            <input type="text" id="inputSubject" placeholder="Subject" ng-model="eventInfo.Subject">
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="inputCategory">Category</label>
+        <div class="controls">
+            <select ng-options="category.id as category.CategoryName for category in eventCategories" ng-model="eventInfo.Category">
+            </select>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="inputLocation">Location</label>
+        <div class="controls">
+            <input type="text" id="inputLocation" placeholder="Location" ng-model="eventInfo.Location">
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="inputStartDate">Start date</label>
+        <div class="controls">
+            <input type="text" id="inputStartDate" data-date-format="yyyy-mm-dd" placeholder="Start date" class="datepicker" ng-model="eventInfo.StartDate" bs-datepicker>
+            <input type="text" id="inputStartTime" placeholder="Start time" class="timepicker" ng-model="eventInfo.StartTime" bs-timepicker>
+            
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="inputEndDate">End date</label>
+        <div class="controls">
+            <input type="text" id="inputEndDate" data-date-format="yyyy-mm-dd" placeholder="End date" class="datepicker" ng-model="eventInfo.EndDate" bs-datepicker>
+            <input type="text" id="inputEndTime" placeholder="End time" class="timepicker" ng-model="eventInfo.EndTime" bs-timepicker>
+
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="inputDescription">Description</label>
+        <div class="controls">
+            <input type="text" id="inputDescription" placeholder="Description" ng-model="eventInfo.Description">
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="inputImportant">Important</label>
+        <div class="controls">
+            <input checked type="checkbox" id="inputImportant" ng-model="eventInfo.Important">
+        </div>
+    </div>
         </form>
     </div>
     <div class="modal-footer">
@@ -47,10 +100,63 @@
             <div class="control-group">
                 <label class="control-label" for="inputSubject">ID</label>
                 <div class="controls">
-                    <input type="text" id="inputID" ng-model="inputID" disabled>
+                    <input type="text" id="inputID" ng-model="eventInfo.ID" disabled>
                 </div>
             </div>
-            <ng-include src="'views/partials/event_form.html'"></ng-include>
+            <!--<ng-include src="'views/partials/event_form.html'"></ng-include>-->
+                <div class="control-group">
+        <label class="control-label" for="inputSubject">Subject</label>
+        <div class="controls">
+            <input type="text" id="inputSubject" placeholder="Subject" ng-model="eventInfo.Subject">
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="inputCategory">Category</label>
+        <div class="controls">
+            <select ng-options="category.id as category.CategoryName for category in eventCategories" ng-model="eventInfo.Category">
+            </select>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="inputLocation">Location</label>
+        <div class="controls">
+            <input type="text" id="inputLocation" placeholder="Location" ng-model="eventInfo.Location">
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="inputStartDate">Start date</label>
+        <div class="controls">
+            <input type="text" id="inputStartDate" data-date-format="yyyy-mm-dd" placeholder="Start date" class="datepicker" ng-model="eventInfo.StartDate" bs-datepicker>
+            <input type="text" id="inputStartTime" placeholder="Start time" class="timepicker" ng-model="eventInfo.StartTime" bs-timepicker>
+            
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="inputEndDate">End date</label>
+        <div class="controls">
+            <input type="text" id="inputEndDate" data-date-format="yyyy-mm-dd" placeholder="End date" class="datepicker" ng-model="eventInfo.EndDate" bs-datepicker>
+            <input type="text" id="inputEndTime" placeholder="End time" class="timepicker" ng-model="eventInfo.EndTime" bs-timepicker>
+
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="inputDescription">Description</label>
+        <div class="controls">
+            <input type="text" id="inputDescription" placeholder="Description" ng-model="eventInfo.Description">
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="inputImportant">Important</label>
+        <div class="controls">
+            <input checked type="checkbox" id="inputImportant" ng-model="eventInfo.Important">
+        </div>
+    </div>
         </form>
     </div>
     <div class="modal-footer">

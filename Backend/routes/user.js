@@ -36,8 +36,10 @@ exports.login =  function(req, res){
         res.send(401);
       }
       else {
-        req.session.user_id = user[0].id;
-        console.log(req.session);
+        req.cookies.username = user[0].Username;
+        req.session.username = user[0].Username;
+        //console.log(req.session);
+        res.cookie('rememberme', 'yes', { maxAge: 900000, httpOnly: false});
         res.send({
           id : user[0].id,
           Username : user[0].Username,
@@ -249,27 +251,31 @@ exports.modifyEvent = function(req, res)
 
         db.models.Event.get(eventID,
           function(err, event){
-            event.CategoryFK = req.body.category;
-            event.TypeFK = req.body.type;
-            event.Subject = req.body.subject;
-            event.Location = req.body.location;
-            event.StartDate = new Date(req.body.start_date);
-            event.EndDate = new Date(req.body.end_date);
-            event.Description = req.body.description;
-            event.Important = req.body.important,
-            event.LastchangedDate = new Date();
+            db.models.Category.get(req.body.category,
+              function(err, category){
 
-            event.save(function(err){
-              if(err) console.log(err);
-              else console.log("Event modified");
+                event.CategoryFK = category;
+                event.TypeFK = req.body.type;
+                event.Subject = req.body.subject;
+                event.Location = req.body.location;
+                event.StartDate = new Date(req.body.start_date);
+                event.EndDate = new Date(req.body.end_date);
+                event.Description = req.body.description;
+                event.Important = req.body.important,
+                event.LastchangedDate = new Date();
 
-              db.sync(function(err){
-                if(err) console.log(err);
+                event.save(function(err){
+                  if(err) console.log(err);
+                  else console.log("Event modified");
 
-                res.send({Event : event});
+                  db.sync(function(err){
+                    if(err) console.log(err);
+
+                    res.send({Event : event});
+                  });
+                });
               });
-            });
-        });
+          });
       }
     });
   });
@@ -297,7 +303,10 @@ exports.deleteEvent = function(req, res)
             event.remove(function(err){
               db.sync(function(err){
                 if(err) console.log(err);
-                else console.log("event deleted");
+                else {
+                  console.log("event deleted");
+                  res.send(200);
+                }
               });
             });
           });

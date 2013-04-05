@@ -1,6 +1,6 @@
 'use strict';
 
-FrontendApp.controller('MainCtrl', function($scope, datamodel) {
+FrontendApp.controller('MainCtrl', function($rootScope, $scope, datamodel) {
     var date = new Date();
     var d = date.getDate();
     var m = date.getMonth();
@@ -12,10 +12,11 @@ FrontendApp.controller('MainCtrl', function($scope, datamodel) {
     $scope.eventSources = [];
     $scope.equalsTracker = 0;
     $scope.inputImportant = false;
-    $scope.userid = 1;
+    $scope.userid = $rootScope.User.id;
+    $scope.eventInfo = {};
     $('.datepicker').datepicker();
     $('.timepicker').timepicker({
-        showMeridian : false,
+        showMeridian : false
     });
 
     $("#calendar").fullCalendar({
@@ -34,17 +35,27 @@ FrontendApp.controller('MainCtrl', function($scope, datamodel) {
             }, function(){
                 var startDate = new Date(e.StartDate);
                 var endDate = new Date(e.EndDate);
+                var categoryID;
 
-                $scope.inputID = e.id;
-                $scope.inputSubject = e.Subject;
-                $scope.inputCategory = e.CategoryFK.id; 
-                $scope.inputLocation = e.Location;
-                $scope.inputStartDate = startDate.toString("yyyy-MM-dd");
-                $scope.inputStartTime = startDate.toString("HH:mm");
-                $scope.inputEndDate = endDate.toString("yyyy-MM-dd");
-                $scope.inputEndTime = endDate.toString("HH:mm");
-                $scope.inputDescription = e.Description;
-                $scope.inputImportant = e.Important;
+                if(e.CategoryFK.id != undefined)
+                {
+                    categoryID = e.CategoryFK.id;
+                }
+                else
+                {
+                    categoryID = e.CategoryFK;
+                }
+
+                $scope.eventInfo.ID = e.id;
+                $scope.eventInfo.Subject = e.Subject;
+                $scope.eventInfo.Category = categoryID; 
+                $scope.eventInfo.Location = e.Location;
+                $scope.eventInfo.StartDate = startDate.toString("yyyy-MM-dd");
+                $scope.eventInfo.StartTime = startDate.toString("HH:mm");
+                $scope.eventInfo.EndDate = endDate.toString("yyyy-MM-dd");
+                $scope.eventInfo.EndTime = endDate.toString("HH:mm");
+                $scope.eventInfo.Description = e.Description;
+                $scope.eventInfo.Important = e.Important;
                 $("#modifyEventModal").modal('toggle');
                 $("#modifyEventModal").modal('show');
             });
@@ -52,16 +63,27 @@ FrontendApp.controller('MainCtrl', function($scope, datamodel) {
     });
     
     $scope.fetchEvents = function(start, end){
-        var userid = 1;
+        var userid = $scope.userid;
 
         $scope.fetchCategories();
         datamodel.Event.query({userid: userid, time1: start, time2: end}, function(data){
             $scope.events = (_.map(data, function(event){
                 
+                var categoryID;
+
+                if(event.CategoryFK.id != undefined)
+                {
+                    categoryID = event.CategoryFK.id;
+                }
+                else
+                {
+                    categoryID = event.CategoryFK;
+                }
+
                 return {
                     id: event.id,
                     title: event.Subject,
-                    category: event.CategoryFK.id,
+                    category: categoryID,
                     color: event.CategoryFK.Color,
                     start: new Date(event.StartDate),
                     end: new Date(event.EndDate)
@@ -73,7 +95,7 @@ FrontendApp.controller('MainCtrl', function($scope, datamodel) {
     };
 
     $scope.fetchCategories = function(){
-        var userid = 1;
+        var userid = $scope.userid;
 
         datamodel.Category.query({userid: userid}, function(data){
             $scope.eventCategories = (_.map(data, function(category){
@@ -105,17 +127,20 @@ FrontendApp.controller('MainCtrl', function($scope, datamodel) {
     $scope.remove = function(index) {
         $scope.events.splice(index,1);
     };
-
+    $scope.clearEventInfo = function(){
+        $scope.eventInfo = {};
+    };
     $scope.addNewEvent = function(){
+
         var newEvent = new datamodel.Event({
-            category : $scope.inputCategory,
+            category : $scope.eventInfo.Category,   
             type : 1,
-            subject : $scope.inputSubject,
-            location : $scope.inputLocation,
-            start_date : $scope.inputStartDate + "T" + $scope.inputStartTime + "-0400",
-            end_date : $scope.inputEndDate + "T" + $scope.inputEndTime + "-0400",
-            description : $scope.inputDescription,
-            important : $scope.inputImportant
+            subject : $scope.eventInfo.Subject,
+            location : $scope.eventInfo.Location,
+            start_date : $scope.eventInfo.StartDate + "T" + $scope.eventInfo.StartTime + "-0400",
+            end_date : $scope.eventInfo.EndDate + "T" + $scope.eventInfo.EndTime + "-0400",
+            description : $scope.eventInfo.Description,
+            important : $scope.eventInfo.Important
         });
 
         newEvent.$save({userid: $scope.userid}, function(data){
@@ -124,7 +149,7 @@ FrontendApp.controller('MainCtrl', function($scope, datamodel) {
                 title: data.Subject,
                 start: data.StartDate,
                 end: data.EndDate
-            };
+            };  
 
             $scope.fetchEvents();
             //$("#calendar").fullCalendar('renderEvent', e);
@@ -132,31 +157,32 @@ FrontendApp.controller('MainCtrl', function($scope, datamodel) {
     };
     $scope.modifyEvent = function(){
         var event = new datamodel.Event({
-            id : $scope.inputID,
-            category : 1,
+            id : $scope.eventInfo.ID,
+            category : $scope.eventInfo.Category,
             type : 1,
-            subject : $scope.inputSubject,
-            location : $scope.inputLocation,
-            start_date : $scope.inputStartDate + "T" + $scope.inputStartTime + "-0400",
-            end_date : $scope.inputEndDate + "T" + $scope.inputEndTime + "-0400",
-            description : $scope.inputDescription,
-            important : $scope.inputImportant
+            subject : $scope.eventInfo.Subject,
+            location : $scope.eventInfo.Location,
+            start_date : $scope.eventInfo.StartDate + "T" + $scope.eventInfo.StartTime + "-0400",
+            end_date : $scope.eventInfo.EndDate + "T" + $scope.eventInfo.EndTime + "-0400",
+            description : $scope.eventInfo.Description,
+            important : $scope.eventInfo.Important
         });
 
         event.$save({
             userid: $scope.userid,
-            eventid : $scope.inputID
+            eventid : $scope.eventInfo.ID
         }, function(data){
             $scope.fetchEvents();
         });
     };
     $scope.deleteEvent = function(){
-        console.log($scope.inputID);
+        console.log($scope.eventInfo.ID);
         datamodel.Event.delete({
-            eventid: $scope.inputID
+            userid: $scope.userid,
+            eventid: $scope.eventInfo.ID
+        }, function(data){
+            $scope.fetchEvents();
         });
-
-        $scope.fetchEvents();
     };
 
 
