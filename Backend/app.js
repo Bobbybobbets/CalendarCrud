@@ -8,13 +8,24 @@ var allowCrossDomain = function(req, res, next){
     res.send(200);
   }
   else if ( 'POST' == req.method ){
-    console.log(req);
     next();
   }
   else {
     next();
   }
 };
+
+var checkAuth = function(req, res, next){
+  console.log(req.session);
+  if(!req.session.user_id && req.url != "/users/login"){
+    res.send(401);
+  }
+  else{
+    next();
+  }
+};
+
+
 
 /**
  * Module dependencies.
@@ -34,12 +45,18 @@ config.set('db_host', 'mysql://root:root@localhost:8889/FoxCode');
 config.set('url_models', './models/models');
 
 var app = express();
+var memStore = express.session.MemoryStore;
 
 app.configure(function(){
   app.set('port', process.env.PORT || 3001);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
+  app.use(express.cookieParser());
+  app.use(express.session({secret: 'secret_key', store : memStore({
+    reapInterval : 6000 * 10
+  })}));
   app.use(allowCrossDomain);
+  //app.use(checkAuth);
   app.use(express.favicon());
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
@@ -64,7 +81,7 @@ app.get('/events/:time1/:time2', events.getInInterval);
 app.get('/events/categories', events.getCategories);
 app.get('/events/types', events.getTypes);
 app.get('/events/:eventid', events.get);
-//app.post('/users/:username/:password', user.login);
+app.post('/users/login', user.login);
 app.post('/users', user.create);
 app.post('/users/:userid/events', user.addEvent);
 app.post('/users/:userid/events/:eventid', user.modifyEvent);

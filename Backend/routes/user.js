@@ -19,15 +19,31 @@ exports.list = function(req, res){
   Login
 */
 exports.login =  function(req, res){
-  orm.connect("mysql://root:root@localhost:8889/FoxCode", function(err, db){
-    db.load('./models/models', function(err){});
+  orm.connect(config.get("db_host"), function(err, db){
+    db.load(config.get("url_models"), function(err){});
     
-    db.models.User.find({ username: req.params.username, password: req.params.password }, function(User){
-      if (User === null) {
-  	return console.log("User does not exist!");
+    var username = req.body.Username;
+    var password = req.body.Password;
+
+
+    db.models.User.find({ 
+      Username : username, 
+      Password : password 
+    }, 1, function(err, user){
+      if(err) console.log(err);
+
+      if (user.length == 0) {
+        res.send(401);
       }
       else {
-        res.redirect("index.html");
+        req.session.user_id = user[0].id;
+        console.log(req.session);
+        res.send({
+          id : user[0].id,
+          Username : user[0].Username,
+          FirstName : user[0].FirstName,
+          LastName : user[0].LastName
+        });
       }
     });
   });
@@ -117,30 +133,39 @@ exports.getEvent = function(req, res){
  */
 exports.create = function(req, res)
 {
-  orm.connect("mysql://root:root@localhost:8889/FoxCode", function(err, db){
+  orm.connect(config.get("db_host"), function(err, db){
     if(err) console.log(err);
 
-    db.load('./models/models', function(err){
+    db.load(config.get("url_models"), function(err){
       if(err) console.log(err);
     });
 
+    
+
     var newUser = new db.models.User({
-      FirstName : req.body.first_name,
-      LastName : req.body.last_name,
+      Username : req.body.Username,
+      Password : req.body.Password,
+      FirstName : req.body.FirstName,
+      LastName : req.body.LastName,
       CreatedDate : new Date(),
       LastChangedDate : new Date()
     });
 
+    console.log(newUser);
+
     newUser.save(function(err){
       if(err) console.log(err);
-      else console.log("User created");
+      else {
+        db.sync(function(err){
+          if(err) throw err;
+          res.send({
+            id : newUser.id,
+            Username : newUser.Username
+          });
+        });
+      }
     });
 
-    db.sync(function(err){
-      if(err) throw err;
-
-      res.send({User : newUser});
-    });
   });
 };
 

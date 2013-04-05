@@ -2,12 +2,14 @@ FrontendApp.factory('datamodel', function($resource){
     var datamodel = {};
     var serverUrl = "http://localhost\\:3001";
 
-    datamodel.User = $resource(serverUrl + '/users/:userid',
-        {
-            userid: "@userid"
+    datamodel.User = $resource(serverUrl + '/users/:userid:action',{
+            userid: "@userid",
+            action: "@action"
+        },{
+            login : {method : "POST", params : {action : "login"}}
         }
     );
-    
+
     datamodel.Category = $resource(serverUrl + '/users/:userid/events/categories',
         {
             userid: "@userid"

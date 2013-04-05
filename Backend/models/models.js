@@ -5,7 +5,7 @@ module.exports = function(db, cb){
         FirstName       : String,
         LastName        : String,
         Username        : String,
-        Password        : {type: "text", size: 60},
+        Password    : {type: "text", size: 60},
         CreatedDate     : Date,
         LastChangedDate : Date
     });
