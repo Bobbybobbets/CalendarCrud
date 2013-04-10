@@ -1,6 +1,9 @@
 There are two extensions that would be of great benefit to our application.
 
+------------------------------------------------------------------------------------------------------------------------
+
 1 - LOCATION EXTENSION
+
 Instead of merely storing the location as a manually entered string we could make use of the Google Maps Javascript API.
 This would allow the users to get an actual map of their location allowing for easy navigation to Event locations that 
 they are unfamiliar with.
@@ -9,22 +12,22 @@ The API can be found at https://developers.google.com/maps/documentation/javascr
 
 Changes necessary for this extension to work would be:
 
-• We would create a new table named Location which would store all the locations entered by users. It would have the 
+  • We would create a new table named Location which would store all the locations entered by users. It would have the 
   following values. LocationPK (int), EventFK (int, not nullable), LocationName (string), LocationLat (double, nullable),
   LocationLong (double, nullable) & PrivateLocation (bit, not nullable).
 
-•	The existing Location field in the Event table would be changed to a foreign key, which references a record in the 
+  •	The existing Location field in the Event table would be changed to a foreign key, which references a record in the 
   NEW location table,  LocationFK (int, not nullable).
 
-•	The edit event would need to be changed in order to make use of the new API.
+  •	The edit event would need to be changed in order to make use of the new API.
 
-•	We see this working as an optional feature. The user would still be able to just enter/display the name of the 
+  •	We see this working as an optional feature. The user would still be able to just enter/display the name of the 
   location if they wish. However if they chose to be more descriptive, there would be a button beside this field that 
   would open the API and allow them to find a place, set the marker and in doing so it would store the position as geo 
   cords in the LocationLat/LocationLong. There would also be a checkbox to mark this location as private. 
   Note: the default for PrivateLocation would be true.
 
-•	The next step of offered functionality would be to offer them an interface for getting the directions to the location 
+  •	The next step of offered functionality would be to offer them an interface for getting the directions to the location 
   given an address of the starting point.
 
 We don't believe there exists any roadblocks in our apps ability to implement this extension. The hardest part would be 
@@ -32,21 +35,30 @@ the data migration to the new data structure. The UI is easily changed/configure
 
 To accomplish the difficult data migration we would:
 1.	Create the new Location Table
+
 2.	Chang the Location Field on the Event table to allow for nulls
+
 3.	From the Event table move the Location & EventPK fields for each record into the LocationName and EventFK fields in 
       the Location table
+
 4.	On the Event table change the (now empty) Location field type from a varchar to an int
+
 5.	Go through the new Location table and insert the LocationPK from that table into the LocationFK of the Event table
       by comparing the Location-EventFK to the Event-EventPK
+
 6.	On the event table change the LocationFK to a non nullable field
+
 7.	On the Location table delete the EventFK column as it is not necessary (just used for data migration)
 
+---------------------------------------------------------------------------------------------------------------------
 
 2 - EVENT SHARING AS GROUPS EXTENSION
+
 The sharing of events between people would be a useful extension for groups of people, such as companies or families and
 friends. 
 
-Required Database Changes:
+DATABASE Changes:
+
 •	Modify the EVENT table to include an additional field: a Group table Foregin Key. 
       The Group table Foreign Key would be a nullable field and would allow the person creating an event to relate it 
       to one of the groups they are a part of.
@@ -70,7 +82,8 @@ Required Database Changes:
       The Invitation table is where the records for group invitations would be stored.
 
  
-Required UI additions:
+UI Changes:
+
 •	Modify the existing Event Edit/Create view would need a new Combo Box field with a label “Group” that would allow the 
   user to tie the event to a group. Note that the Group combo box would only display groups that the user is a part of 
   and they must have a role level of Admin or Owner.
@@ -100,6 +113,8 @@ Required UI additions:
   will display itself once the user has logged in. Form this page the user can choose to accept an invitation, decline 
   it or close the page without making any decisions.
 
+
+
 Most of the Groups workflow does not contain new concepts. It’s an editable object (the group) that has 
 children (members) which can be added and removed. The group can be associated to many events, however there are two 
 key new concepts to make note of.
@@ -114,14 +129,20 @@ Second of which is the idea of the GROUP MEMBER ROLES (member/admin/owner). Cert
 functionality can only be accessed by people with the appropriate roles. These roles are what give the groups their 
 structure and organization. The capacities of each role are as follows.
 
+
+
 A MEMBER has the capacity to:
+
 •	Accept an invitation to a group
 
 •	View the Events for that group
 
 •	Remove themselves from a group
 
+
+
 An ADMIN has the capacity to:
+
 •	Accept an invitation to a group
 
 •	View Events for that group
@@ -136,10 +157,15 @@ An ADMIN has the capacity to:
 
 •	Remove themselves from that group
 
+
+
 An OWNER has all the rights of an admin plus:
+
 •	Delete a group they created
 
 •	Remove group members that have a role of “admin” or “member”
+
+
 
 
 This is a much more significant change and would require many additions to the database and many more UI views to be 
