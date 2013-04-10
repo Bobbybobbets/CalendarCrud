@@ -26,28 +26,36 @@ the SQL database. We entered a few records into each table to confirm that every
 data would take shape and its relationships. 
 
 It’s at this point we realized a few things:
+
 •  This is when we actually created the Category table since it felt like the Type was not enough to organize the 
-    events. 
+    events.
+    
 •	It became evident that some events had precedence over others and thus we added the “Important” bit/flag column 
-    on the Event table to give certain events elevation among the rest. 
+    on the Event table to give certain events elevation among the rest.
+    
 •	We also figured that in order to deal with any concurrency issues and to keep a well-documented database we 
     decided to add the following 5 columns to every table: CreatedDate, LastChangedBy, LastChangedDate, TimeStamp. 
- 
+
+
 After the team defined the useful information that our app would store the next step was to specify the way in which 
 the user could interact with the data, our UI. We discussed and created mockups of the views. For each one we defined
 the main areas of the view, such as: the information displayed, the navigation options, the actions the user could 
 take (Edit/Save), items on the view the user can interact with. 
 
-Our “Project Goals” – since a calendar/event planner app is not exactly a new idea, our team always found that we 
+“PROJECT GOALS” – since a calendar/event planner app is not exactly a new idea, our team always found that we 
 went back to the user experience instead of new, revolutionary concepts. With this in mind the best way to convey 
 our goals is through user expectations:
-•	Access: some of the events entered by users can be of a private nature. So individual logins and password 
+
+•	ACCESS: some of the events entered by users can be of a private nature. So individual logins and password 
     protection are a necessity.  
-•	Simplicity: the goal is to keep the app simple. If this becomes overly complex then it would cease to be a “useful 
+
+•	SIMPLICITY: the goal is to keep the app simple. If this becomes overly complex then it would cease to be a “useful 
     tool” and turn into an “encumbering hurdle” for the users. We needed to keep the data and interface relatively 
     simple and easy to use.
-•	Speed: if it takes the users too long to enter events, modify them, or view them. Then the user may become 
+
+•	SPEED: if it takes the users too long to enter events, modify them, or view them. Then the user may become 
     frustrated and the app is a failure. 
-•	Interface (ease of use and expected): the interface needs to be intuitive and above all else it needs to be what 
+
+•	INTERFACE (ease of use and expected): the interface needs to be intuitive and above all else it needs to be what 
     the user would expect from this type of app. Ie. Don’t have the user manually enter a date when they would expect
     to do so using a date picker control.
