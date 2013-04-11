@@ -6,6 +6,7 @@ This was used in our project because we needed a quick and efficient way of crea
 
 License : Apache License v2.0, http://www.apache.org/licenses/LICENSE-2.0
 
+
 jQuery
 
 jQuery is a javascript library that helps interact with the Document Object Model(DOM), manage events, and manage http requests/responses among other things.
@@ -32,6 +33,7 @@ Our application has to manage events, so it was natural for us to make the proce
 
 License : MIT License, http://opensource.org/licenses/mit-license.php
 
+
 FullCalendar
 
 FullCalendar is a jQuery plugin that provides programmers with a calendar skeleton from which they can build from.
@@ -39,6 +41,7 @@ FullCalendar is a jQuery plugin that provides programmers with a calendar skelet
 Creating a calendar from scratch would have been very time consuming and our application would have suffered in quality as a consequence.
 
 License : MIT License, http://arshaw.com/js/fullcalendar-1.6.0/license.txt
+
 
 AngularJS
 
@@ -48,6 +51,7 @@ We thought that this framework was very interesting, mostly because of its 2-way
 
 License : MIT License, https://github.com/angular/angular.js/blob/master/LICENSE
 
+
 AngularStrap
 
 AngularStrap defines AngularJS directives as wrappers around Bootstrap javascript classes.
@@ -55,6 +59,7 @@ AngularStrap defines AngularJS directives as wrappers around Bootstrap javascrip
 We needed access to some of Bootstrap's form inputs without sacrificing the 2-way binding of angularJS. This extension was exactly what we wanted. 
 
 License : MIT Licence, http://www.opensource.org/licenses/MIT
+
 
 Express
 
@@ -64,6 +69,7 @@ We chose Express because it was simple and flexible enough to achieve what we wa
 
 License : MIT License, https://github.com/visionmedia/express/blob/master/LICENSE
 
+
 Connect
 
 Connect is a middleware framework for NodeJS providing a bundle of 18 middleware and a rich selection of 3rd-party middleware.
@@ -71,6 +77,7 @@ Connect is a middleware framework for NodeJS providing a bundle of 18 middleware
 This is a dependency that comes bundled with ExpressJS, but we ended up using its Session middleware for our authentication system.
 
 License : MIT License, https://github.com/senchalabs/connect/blob/master/LICENSE
+
 
 API-easy
 
@@ -80,6 +87,7 @@ We used this library in order to test our RESTful API without the need for a cli
 
 License : https://github.com/flatiron/api-easy/blob/master/LICENSE
 
+
 Node-orm2
 
 Node-orm is an Object Relational Mapper for NodeJS.
@@ -87,6 +95,7 @@ Node-orm is an Object Relational Mapper for NodeJS.
 We decided to use this middleware because we wanted to have a model of the data in our application. This made it much easier to manage queries since it implements a object-oriented interface to the database. It also gives us the advantage of being database agnostic.
 
 License : Does not appear to have a license.
+
 
 MySQL
 
