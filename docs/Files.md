@@ -8,7 +8,8 @@
 ./Frontend/views/register.html
 
 ./Backend/app.js
-./Backend/models.js
+./Backend/config.js
+./Backend/models/models.js
 ./Backend/routes/events.js
 ./Backend/routes/index.js
 ./Backend/routes/user.js

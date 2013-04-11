@@ -1,12 +1,12 @@
 var orm = require('orm');
-
+var config = require("../config");
 /*
   Get event list
  */
 
 exports.list = function(req, res){
-  orm.connect("mysql://root:root@localhost:8889/FoxCode", function(err, db){
-    db.load('./models/models', function(err){});
+  orm.connect(config.get("db_host"), function(err, db){
+    db.load(config.get("url_models"), function(err){});
 
     db.models.Event.find({}, function(err, events){
       res.send({events: events});
@@ -15,8 +15,8 @@ exports.list = function(req, res){
 };
 
 exports.get = function(req, res){
-  orm.connect("mysql://root:root@localhost:8889/FoxCode", function(err, db){
-    db.load('./models/models', function(err){});
+  orm.connect(config.get("db_host"), function(err, db){
+    db.load(config.get("url_models"), function(err){});
 
     var eventID = req.params.eventid;
 
@@ -35,8 +35,8 @@ exports.get = function(req, res){
  */
 
 exports.getInInterval = function(req, res){
-  orm.connect("mysql://root:root@localhost:8889/FoxCode", function(err, db){
-    db.load('./models/models', function(err){});
+  orm.connect(config.get("db_host"), function(err, db){
+    db.load(config.get("url_models"), function(err){});
     
     var time1 = parseInt(req.params.time1);
     var time2 = parseInt(req.params.time2);
@@ -65,8 +65,8 @@ exports.getInInterval = function(req, res){
 };
 
 exports.getCategories = function(req, res){
-  orm.connect("mysql://root:root@localhost:8889/FoxCode", function(err, db){
-    db.load('./models/models', function(err){});
+  orm.connect(config.get("db_host"), function(err, db){
+    db.load(config.get("url_models"), function(err){});
 
     db.models.Category.find({}, function(err, categories){
       res.send({categories : categories});
@@ -75,8 +75,8 @@ exports.getCategories = function(req, res){
 };
 
 exports.getTypes = function(req, res){
-  orm.connect("mysql://root:root@localhost:8889/FoxCode", function(err, db){
-    db.load('./models/models', function(err){});
+  orm.connect(config.get("db_host"), function(err, db){
+    db.load(config.get("url_models"), function(err){});
 
     db.models.Type.find({}, function(err, types){
       res.send({types : types});
@@ -85,8 +85,8 @@ exports.getTypes = function(req, res){
 };
 
 exports.createCategory = function(req, res){
-  orm.connect("mysql://root:root@localhost:8889/FoxCode", function(err, db){
-    db.load('./models/models', function(err){console.log(err);});
+  orm.connect(config.get("db_host"), function(err, db){
+    db.load(config.get("url_models"), function(err){console.log(err);});
 
     var newCategory = new db.models.Category({
       CategoryName : req.body.category_name,
@@ -108,8 +108,8 @@ exports.createCategory = function(req, res){
 };
 
 exports.createType = function(req, res){
-  orm.connect("mysql://root:root@localhost:8889/FoxCode", function(err, db){
-    db.load('./models/models', function(err){});
+  orm.connect(config.get("db_host"), function(err, db){
+    db.load(config.get("url_models"), function(err){});
 
     var newType = new db.models.Type({
       TypeName : req.body.type_name,

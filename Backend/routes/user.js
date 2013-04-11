@@ -6,8 +6,8 @@ var config = require("../config");
  */
 
 exports.list = function(req, res){
-  orm.connect("mysql://root:root@localhost:8889/FoxCode", function(err, db){
-    db.load('./models/models', function(err){});
+  orm.connect(config.get("db_host"), function(err, db){
+    db.load(config.get("url_models"), function(err){});
 
     db.models.User.find({}, function(err, users){
       res.send({'users' : users});
@@ -56,8 +56,8 @@ exports.login =  function(req, res){
  */
 
 exports.get = function(req, res){
-  orm.connect("mysql://root:root@localhost:8889/FoxCode", function(err, db){
-    db.load('./models/models', function(err){});
+  orm.connect(config.get("db_host"), function(err, db){
+    db.load(config.get("url_models"), function(err){});
 
     db.models.User.get(req.params.userid, function(err, user){
       if(!err){
@@ -72,8 +72,8 @@ exports.get = function(req, res){
 
 
 exports.getEvents = function(req, res){
-  orm.connect("mysql://root:root@localhost:8889/FoxCode", function(err, db){
-    db.load('./models/models', function(err){});
+  orm.connect(config.get("db_host"), function(err, db){
+    db.load(config.get("url_models"), function(err){});
 
     var userid = req.params.userid;
     var time1 = parseInt(req.params.time1);
@@ -111,8 +111,8 @@ exports.getEvents = function(req, res){
 };
 
 exports.getEvent = function(req, res){
-  orm.connect("mysql://root:root@localhost:8889/FoxCode", function(err, db){
-    db.load('./models/models', function(err){});
+  orm.connect(config.get("db_host"), function(err, db){
+    db.load(config.get("url_models"), function(err){});
 
     var userid = req.params.userid;
     var eventid = req.params.eventid;
@@ -173,11 +173,11 @@ exports.create = function(req, res)
 
 exports.addEvent = function(req, res)
 {
-  orm.connect("mysql://root:root@localhost:8889/FoxCode", function(err, db){
+  orm.connect(config.get("db_host"), function(err, db){
 
     if(err) console.log(err);
 
-    db.load('./models/models', function(err){
+    db.load(config.get("url_models"), function(err){
       if(err) console.log(err);
     });
 
@@ -226,10 +226,10 @@ exports.addEvent = function(req, res)
 
 exports.modifyEvent = function(req, res)
 {
-  orm.connect("mysql://root:root@localhost:8889/FoxCode", function(err, db){
+  orm.connect(config.get("db_host"), function(err, db){
     if(err) console.log(err);
 
-    db.load('./models/models', function(err){
+    db.load(config.get("url_models"), function(err){
       if(err) console.log(err);
     });
 
@@ -282,10 +282,10 @@ exports.modifyEvent = function(req, res)
 };
 exports.deleteEvent = function(req, res)
 {
-  orm.connect("mysql://root:root@localhost:8889/FoxCode", function(err, db){
+  orm.connect(config.get("db_host"), function(err, db){
     if(err) console.log(err);
 
-    db.load('./models/models', function(err){
+    db.load(config.get("url_models"), function(err){
       if(err) console.log(err);
     });
 

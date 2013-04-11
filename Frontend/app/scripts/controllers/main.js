@@ -59,9 +59,11 @@ FrontendApp.controller('MainCtrl', function($rootScope, $scope, $location, datam
                 $scope.eventInfo.Category = categoryID; 
                 $scope.eventInfo.Location = e.Location;
                 $scope.eventInfo.StartDate = startDate.toString("yyyy-MM-dd");
-                $scope.eventInfo.StartTime = startDate.toString("HH:mm");
+                //$scope.eventInfo.StartTime = startDate.toString("HH:mm");
+                $('#tpStart2').val(startDate.toString("HH:mm"));
                 $scope.eventInfo.EndDate = endDate.toString("yyyy-MM-dd");
-                $scope.eventInfo.EndTime = endDate.toString("HH:mm");
+                //$scope.eventInfo.EndTime = endDate.toString("HH:mm");
+                $('#tpEnd2').val(endDate.toString("HH:mm"));
                 $scope.eventInfo.Description = e.Description;
                 $scope.eventInfo.Important = e.Important;
                 $("#modifyEventModal").modal('toggle');
@@ -94,7 +96,8 @@ FrontendApp.controller('MainCtrl', function($rootScope, $scope, $location, datam
                     category: categoryID,
                     color: event.CategoryFK.Color,
                     start: new Date(event.StartDate),
-                    end: new Date(event.EndDate)
+                    end: new Date(event.EndDate),
+                    allDay : false
                 };
             }));
 
@@ -145,8 +148,8 @@ FrontendApp.controller('MainCtrl', function($rootScope, $scope, $location, datam
             type : 1,
             subject : $scope.eventInfo.Subject,
             location : $scope.eventInfo.Location,
-            start_date : $scope.eventInfo.StartDate + "T" + $scope.eventInfo.StartTime + "-0400",
-            end_date : $scope.eventInfo.EndDate + "T" + $scope.eventInfo.EndTime + "-0400",
+            start_date : $scope.eventInfo.StartDate + "T" + $('#tpStart1').val() + "-0400",
+            end_date : $scope.eventInfo.EndDate + "T" + $('#tpEnd1').val() + "-0400",
             description : $scope.eventInfo.Description,
             important : $scope.eventInfo.Important
         });
@@ -185,8 +188,8 @@ FrontendApp.controller('MainCtrl', function($rootScope, $scope, $location, datam
             type : 1,
             subject : $scope.eventInfo.Subject,
             location : $scope.eventInfo.Location,
-            start_date : $scope.eventInfo.StartDate + "T" + $scope.eventInfo.StartTime + "-0400",
-            end_date : $scope.eventInfo.EndDate + "T" + $scope.eventInfo.EndTime + "-0400",
+            start_date : $scope.eventInfo.StartDate + "T" + $('#tpStart2').val() + "-0400",
+            end_date : $scope.eventInfo.EndDate + "T" + $('#tpEnd2').val() + "-0400",
             description : $scope.eventInfo.Description,
             important : $scope.eventInfo.Important
         });

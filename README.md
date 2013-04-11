@@ -1,81 +1,31 @@
-Comp2406 project proposal
 Foxcode Calendar
+Patrice Paquette 100866566
+Logan Towers 100716355
 
-The plan is to create a calendar/event planner.
+SUMMARY
+Our application is a calendar/event planner. You will start at the Login page, at which point you will need to enter a username and a password.
+Since you do not have an account already, you must click the "Register" hyperlink and fill out the form. If the process finishes successfully, you will be redirected to the Login page.
+Once you have logged in, it would be a good idea to add a few event categories, such as School and Work for example. Once this is done, you are free to add, modify, and delete events; the
+calendar will update automatically as you use the application. Three views are available : monthly, weekly, and daily, and you can choose to filter out categories by clicking
+on the checkboxes in the list at the top right. As expected, clicking on the logout button will redirect you to the Login page.
 
-An Event can have:
-  - Start time
-	- End time
-	- Category - Personal, business, school, etc
-	- Type - Meeting, appointment, pick-up, etc
-	- Subject (like in an email) - "Meeting with TA to discuss proj" ex.
-	- Body/description - "The plan is too meet on sunday, so we can discuss the partoculars of the project. We need to note certain key aspects about timing" ex.
-- A flag indicating it is important
+DEPENDENCIES
+Bootstrap
+AngularJS
+jQuery
+FullCalendar
+ExpressJS
+NodeJS
+Node-orm2
+MySQL
 
-I see there being these Views or Pages:
-	- Monthly
-	- Weekly
-	- Daily
-	- An Event edit page: the user can create a new event here or edit an existing event
-		Event list (all), OR maybe need a search feature if we cant display all. Then we could show top 50 or 100 and then they can filter the results
+GETTING STARTED
+1. Install and start a webserver (we use Apache)
+2. Install database supported by Node-orm2 (we use MySQL)
+3. Create a database called "FoxCode"
+4. Browse to ./Backend/app.js and change line 44 "config.set('db_host', 'mysql://root:root@localhost:8889/FoxCode');" with your information
+5. Start ./Backend/app.js with nodeJS. This should automatically create the database tables.
+6. Browse to localhost:{port}/FoxCode/Frontend/app/#/login
+7. Enjoy!
 
-View Details
-Monthly:
-	- Display events on theÅ†accordingÅ†days with minimum info, due to UI space constraint
-		possibly fit the first two events for a day, then have an identifier (something like, ..., or an icon) to let the user know there is more that is not shown
-	- Have a top 5 upcoming events list, so the user canÅ†easilyÅ†identify the most immediate events
-	- The days for the Month will only be displayed, ie we will not show feb 1, 2, 3 etc. if the user isÅ†lookingÅ†atÅ†JanuaryÅ†(i suggest this forÅ†simplicityÅ†sake)
-	- The user can create new events
-	- Edit/delete events
-	- Click on an event in the calendar or top 5 list and view that events in detail (this would take them toÅ†theÅ†Event edit page withÅ†theÅ†data filled in)
-
-Weekly:
-	- Events are display on the weekly calendar as blocks (colour coding could come in handy here too)
-	- Top 5 pending events list
-	- If an Event is before 6 am or after 10pm, maybe we could just have an area (indicated by the blue dotted line) where these events will display by default. This is instead of having to do a full 24 hour block, where most of it will not get utilized on a regular basis and would just be taking up screen real estate
-	- The user can create new events
-	- Edit/delete events
-	- Click on an event in the calendar or top 5 list and view that events in detail (this would take them toÅ†theÅ†Event edit page withÅ†theÅ†data filled in)
-
-Daily:
-	- This will have a full 24 hours blocked out
-	- Top 5 pending events list
-	- The user can create new events
-	- Edit/delete events
-	- Click on an event in the calendar or top 5 list and view that events in detail (this would take them toÅ†theÅ†Event edit page withÅ†theÅ†data filled in)
-
-Event Edit:
-	- Allows the user to create/view/edit an events details
-	- Some items can have defaults if necessary
-
-Event List:
-	- Either have a show all list, ORÅ†we can cap it to like 50/100 and then give them a search option to narrow down the list
-	- Filters for the list - important, event is old (ie in the past),Å†
-
-Actions:
-	- Edit/Delete an event - This can happen in two ways 1)Å†the user selects the event by clicking on it in the calendar, this will direct them to the Event Edit Page where they perform the desired action 2)Å†Clicking the edit/delete button, which takes them to the Event List Page where they select one, this will then navigate them to theÅ†Å†Event Edit PageÅ†where they perform the desired actionÅ†
-	- New Event - create a new event by clicking the New + button
-	- View Event - similar to edit/delete, except once the user finds the event they just view instead of taking other actions
-	- Filtering, maybe a combo box or two where the user can filter events by type or category
-	- Changing views, use the buttons to navigate between views. Each view will require a different set of criteria from the user before displaying, it can perhaps have defaults to try and anticipate the users actions
-
-Buttons:
-	- New: will take the user to a blank event where they can fill in the necessary data and then save
-	- Edit/delete: i see this as one button, it will take the user to another page with a list of all events, where they can select one and either view/edit it or delete it
-	- Monthly/Weekly/Daily ... these will navigate the user between the calendar views, if your on the monthly view then the daily & weekly view buttons will be available
-	- Monthly - will ask for the month & year you are interested in viewing
-	- Weekly will ask for a month/day/year and then display the week that contains that day
-    - DailyÅ†will ask for a month/day/year and then display that day
-
-
-Milestones
-
-1. Architecture diagram & external library/program use
-2. Application model definition/Database schema & server API (RESTful API)
-3. server API implementation (includes permission-based security)
-4. Client-side views: login, add event, modify event, remove event,Å†weekly view
-5. Framework demo (running application skeleton)
-6. Client-side views: monthly view, day view, event list(with filters)
-7. Working prototype/demo
-8. Draft documentation
-9. Final code and documentation (April 10th)
+note : We haven't had time to properly sanitize the input so no or bizarre values will most likely lead to crashes.
