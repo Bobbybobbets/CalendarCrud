@@ -13,4 +13,8 @@ FrontendApp.controller('RegisterCtrl', function($scope, datamodel, $location){
             $location.path("/login");
         });
     };
+
+    $scope.cancel = function(){
+        $location.path("/login");
+    };
 });

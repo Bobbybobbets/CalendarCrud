@@ -1,0 +1,24 @@
+{
+  "name": "fullcalendar",
+  "version": "0.0.0",
+  "main": [
+    "fullcalendar.js",
+    "fullcalendar.css",
+    "fullcalendar.print.css",
+    "gcal.js"
+  ],
+  "dependencies": {
+    "jquery": "",
+    "jquery-ui": ""
+  },
+  "gitHead": "1134615aa5951c50b543862fff433c085f120cf1",
+  "readme": "# FullCalendar\n\nFullCalendar component for Bower\n\nhttp://arshaw.com/fullcalendar/",
+  "readmeFilename": "README.md",
+  "_id": "fullcalendar@1.5.4",
+  "description": "FullCalendar component for Bower",
+  "commit": "1134615aa5951c50b543862fff433c085f120cf1",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/bancek/fullcalendar.git"
+  }
+}

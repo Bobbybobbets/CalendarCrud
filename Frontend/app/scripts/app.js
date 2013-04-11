@@ -22,6 +22,11 @@ var FrontendApp = angular.module('FrontendApp', ['ui', 'ngResource', '$strap.dir
   .config(['$httpProvider', function($httpProvider){
     var loginCheckInterceptor = ['$rootScope', '$q', '$location', function(scope, $q, $location){
 
+      if(scope.User == undefined && $location.path() != '/login')
+      {
+        $location.path('/login'); 
+      }
+
       function success(response){
         return response;
       }

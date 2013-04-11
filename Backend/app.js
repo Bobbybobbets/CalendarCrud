@@ -87,6 +87,7 @@ app.get('/events/:eventid', checkAuth, events.get);
 app.post('/users/login', checkAuth, user.login);
 app.post('/users', checkAuth, user.create);
 app.post('/users/:userid/events', checkAuth, user.addEvent);
+app.post('/users/:userid/events/categories', checkAuth, user.addEventCategory);
 app.post('/users/:userid/events/:eventid', checkAuth, user.modifyEvent);
 app.post('/events/categories', checkAuth, events.createCategory);
 app.post('/events/types', checkAuth, events.createType);

@@ -1,1 +1,7 @@
 /* Will be compiled down to a single stylesheet with your sass files */
+.thumb-color-preview
+{
+    width: 10px;
+    height: 10px;
+    margin-top: 5px;
+}

@@ -1,6 +1,6 @@
 'use strict';
 
-FrontendApp.controller('MainCtrl', function($rootScope, $scope, datamodel) {
+FrontendApp.controller('MainCtrl', function($rootScope, $scope, $location, datamodel) {
     var date = new Date();
     var d = date.getDate();
     var m = date.getMonth();
@@ -14,10 +14,18 @@ FrontendApp.controller('MainCtrl', function($rootScope, $scope, datamodel) {
     $scope.inputImportant = false;
     $scope.userid = $rootScope.User.id;
     $scope.eventInfo = {};
+    $scope.newCategory = {
+        Color : "#ffffff"
+    };
     $('.datepicker').datepicker();
     $('.timepicker').timepicker({
         showMeridian : false
     });
+    /*$('#cp1').colorpicker({
+        format: 'hex'
+    }).on('changeColor', function(ev){
+        $scope.newCategory.Color = ev.color.toHex();
+    });*/
 
     $("#calendar").fullCalendar({
         height: 450,
@@ -143,7 +151,9 @@ FrontendApp.controller('MainCtrl', function($rootScope, $scope, datamodel) {
             important : $scope.eventInfo.Important
         });
 
-        newEvent.$save({userid: $scope.userid}, function(data){
+        newEvent.$save({
+            userid: $scope.userid
+        }, function(data){
             var e = {
                 id: data.id,
                 title: data.Subject,
@@ -153,6 +163,19 @@ FrontendApp.controller('MainCtrl', function($rootScope, $scope, datamodel) {
 
             $scope.fetchEvents();
             //$("#calendar").fullCalendar('renderEvent', e);
+        });
+    };
+    $scope.addNewCategory = function(){
+        var newCategory = new datamodel.Category({
+            CategoryName : $scope.newCategory.Name,
+            Color : $scope.newCategory.Color
+        });
+
+        newCategory.$save({
+            userid : $scope.userid
+        }, function(data){
+            console.log(data);
+            $scope.fetchEvents();
         });
     };
     $scope.modifyEvent = function(){
@@ -183,6 +206,10 @@ FrontendApp.controller('MainCtrl', function($rootScope, $scope, datamodel) {
         }, function(data){
             $scope.fetchEvents();
         });
+    };
+    $scope.logout = function(){
+        $rootScope.User = null;
+        $location.path('/login');
     };
 
 

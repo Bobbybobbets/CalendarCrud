@@ -336,7 +336,31 @@ exports.getEventCategories = function(req, res)
 exports.addEventCategory = function(req, res)
 {
   orm.connect(config.get("db_host"), function(err, db){
+      db.load(config.get("url_models"), function(err){});
 
-  });
+      var userID = req.params.userid;
+      var categoryName = req.body.CategoryName;
+      var categoryColor = req.body.Color;
+
+
+      var newCategory = new db.models.Category({
+        CategoryName : categoryName,
+        Color : categoryColor,
+        CreatedDate : new Date(),
+        LastChangedDate : new Date(),
+        LastChangedBy : userID,
+        UserFK : userID
+      });
+
+      newCategory.save(function(err){
+        if(err) console.log(err);
+        else console.log("Category added");
+      });
+
+      db.sync(function(err){
+        if(err) console.log(err);
+        else res.send(newCategory);
+      });
+});
 };
 
