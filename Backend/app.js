@@ -39,10 +39,17 @@ var express = require('express')
   , path = require('path')
   , bcrypt = require("bcrypt") //hashing algorithm
   , orm = require('orm')
-  , config = require('./config');
+  , config = require('./config')
+  , Sequelize = require('sequelize-mysql').sequelize
+  , mysql = require('sequelize-mysql').mysql
+  , datamodelManager = require('./modules/DatamodelManager/DatamodelManager');
 
 config.set('db_host', 'mysql://root:root@localhost:8889/FoxCode');
 config.set('url_models', './models/models');
+
+for(var key in datamodelManager){
+  console.log(key);
+}
 
 var app = express();
 var MemoryStore = express.session.MemoryStore;

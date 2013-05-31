@@ -1,3 +1,5 @@
+var seq = require("sequelize");
+
 module.exports = function(db, cb){
     db.settings.set("properties.association_key", "{name}");
 
