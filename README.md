@@ -1,7 +1,5 @@
 Foxcode Calendar
 
-Patrice Paquette 100866566
-
 SUMMARY
 
 This application is a calendar/event planner. You will start at the Login page, at which point you will need to enter a username and a password.
